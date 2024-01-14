@@ -145,8 +145,6 @@ extension SearchViewController: UISearchBarDelegate {
     }
 }
 
-
-
 //MARK: - extension CollectionView
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 //MARK: - numberOfItemsInSection
@@ -159,8 +157,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "viewCell",
                                                       for: indexPath) as? CollectionViewCell
-         let model = model?[indexPath.item]
-        
+        let model = model?[indexPath.item]
         cell?.configures(model: model)
         activityIndicator.stopAnimating()
         return cell ?? UICollectionViewCell()

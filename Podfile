@@ -8,4 +8,5 @@ target 'SearchApp' do
   # Pods for SearchApp
 pod 'SnapKit', '~> 5.0.1'
 pod 'SDWebImage', '~> 5.2'
+pod 'Kingfisher', '~> 7.0'
 end

@@ -222,11 +222,9 @@ extension DetailViewController: DetailViewProtocol {
         let logoUrl = URL(string: "http://shans.d2.i-partner.ru\(model.categories.icon)")
         imageLogo.sd_setImage(with: logoUrl,
                               placeholderImage: UIImage(systemName: "photo.circle"))
-        
         let previewUrl = URL(string: "http://shans.d2.i-partner.ru\(model.image)")
         previewImage.sd_setImage(with: previewUrl,
-                                 placeholderImage: UIImage(systemName: "photo"))
-        
+                                 placeholderImage: UIImage(named: "noFoto"))
         titleLabel.text = model.name
         descriptionLabdel.text = model.description
     }

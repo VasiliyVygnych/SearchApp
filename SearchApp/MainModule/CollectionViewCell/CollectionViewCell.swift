@@ -58,9 +58,10 @@ class CollectionViewCell: UICollectionViewCell {
     }
 //MARK: - configures
     func configures(model: listDrugsModel?) {
-        let imageUrl = URL(string: "http://shans.d2.i-partner.ru\(model?.image ?? "")")
-        imageView.sd_setImage(with: imageUrl,
-                                 placeholderImage: UIImage(systemName: "photo"))
+        guard let mod = model else { return }
+        let url = URL(string: "http://shans.d2.i-partner.ru\(mod.image)")
+        imageView.sd_setImage(with: url,
+                              placeholderImage: UIImage(named: "noFoto"))
         titleLabdel.text = model?.name
         descriptionLabdel.text = model?.description
     }

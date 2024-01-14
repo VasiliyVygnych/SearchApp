@@ -12,8 +12,8 @@ import SDWebImage
 class SearchViewController: UIViewController {
     
     var presenter: SearchPresenterProtocol?
-    private var searchController = UISearchController()
     private var activityIndicator = UIActivityIndicatorView()
+    private let searchBar = UISearchBar()
     
     var model: [listDrugsModel]? {
         didSet {
@@ -61,7 +61,7 @@ class SearchViewController: UIViewController {
         navigationItem.leftBarButtonItem?.isHidden = true
         navigationItem.titleView = navigationTitle
         setupeCollectionView()
-        setupeSearch()
+        setupeSearchBar()
         setupeIndicator()
         setupeConstraint()
         setupeButton()
@@ -75,9 +75,9 @@ class SearchViewController: UIViewController {
                                 forCellWithReuseIdentifier: "viewCell")
     }
 //MARK: - setupeSearch
-    private func setupeSearch() {
-        searchController.searchResultsUpdater = self
-        searchController.hidesNavigationBarDuringPresentation = false
+    private func setupeSearchBar() {
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.delegate = self
     }
 //MARK: - setupeIndicator
     private func setupeIndicator() {
@@ -107,13 +107,11 @@ class SearchViewController: UIViewController {
     @objc func showSearch() {
         navigationItem.leftBarButtonItem?.isHidden = false
         navigationItem.rightBarButtonItem?.isHidden = true
-        navigationItem.titleView?.willRemoveSubview(navigationTitle)
-        navigationItem.titleView = searchController.searchBar
+        navigationItem.titleView = searchBar
     }
     @objc func back() {
         navigationItem.leftBarButtonItem?.isHidden = true
         navigationItem.rightBarButtonItem?.isHidden = false
-        navigationItem.titleView?.willRemoveSubview(searchController.searchBar)
         navigationItem.titleView = navigationTitle
     }
 //MARK: - setupeConstraint
@@ -131,21 +129,24 @@ extension SearchViewController: SearchViewProtocol {
         self.model = model
     }
 }
-//MARK: - extension UISearchResultsUpdating
-extension SearchViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else { return }
-        if searchText.count > 2 {
+extension SearchViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar,
+                   textDidChange textSearched: String) {
+        guard let textSearched = searchBar.text else { return }
+        if textSearched.count > 3 {
             activityIndicator.startAnimating()
             Timer.scheduledTimer(withTimeInterval: 1.0,
                                          repeats: false,
                                          block: { (_) in
-                self.presenter?.getSearchText(text: searchText)
-                self.navigationTitle.text = searchText
+                self.presenter?.getSearchText(text: textSearched)
+                self.navigationTitle.text = textSearched
             })
         }
     }
 }
+
+
+
 //MARK: - extension CollectionView
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 //MARK: - numberOfItemsInSection

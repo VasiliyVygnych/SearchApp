@@ -135,19 +135,23 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange textSearched: String) {
         guard let textSearched = searchBar.text else { return }
-        if textSearched.count > 3 {
-            activityIndicator.startAnimating()
-            Timer.scheduledTimer(withTimeInterval: 1.0,
-                                         repeats: false,
-                                         block: { (_) in
-                self.presenter?.getSearchText(text: textSearched)
-                self.navigationTitle.text = textSearched
-            })
-        }
+        activityIndicator.startAnimating() 
+        presenter?.getSearchText(text: textSearched)
+        navigationTitle.text = textSearched
     }
 }
 //MARK: - extension CollectionView
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    
+    
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        model?.count ?? 0
+    }
+    
+    
+    
 //MARK: - numberOfItemsInSection
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {

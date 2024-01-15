@@ -59,7 +59,8 @@ class CollectionViewCell: UICollectionViewCell {
 //MARK: - configures
     func configures(model: listDrugsModel?) {
         guard let mod = model else { return }
-        let url = URL(string: "http://shans.d2.i-partner.ru\(mod.image)")
+        let image = "http://shans.d2.i-partner.ru\(mod.image)"
+        guard let url = URL(string: image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") else { return }
         imageView.sd_setImage(with: url,
                               placeholderImage: UIImage(named: "noFoto"))
         titleLabdel.text = model?.name
@@ -82,7 +83,7 @@ private extension CollectionViewCell {
             make.height.equalTo(82)
         }
         titleLabdel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).inset(-10)
+            make.top.equalTo(imageView.snp.bottom).inset(-20)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().inset(12)
             make.height.lessThanOrEqualTo(80)

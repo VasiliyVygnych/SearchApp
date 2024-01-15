@@ -12,9 +12,8 @@ class SearchInteractor: SearchInteractorInputProtocol {
     var presenter: SearchInteractorOutputProtocol?
     var network: NetworkProtocol?
     
-    func setSearchText(text: String) {
-        network?.search(searchText: text,
-                            completion: { [ weak self ] data in
+    func getData() {
+        network?.search(completion: { [ weak self ] data in
             DispatchQueue.main.async {
                 guard let model = data else { return }
                 self?.presenter?.dataForTheView(model: model)

@@ -23,12 +23,9 @@ class Network: NetworkProtocol {
         }.resume()
     }
 //MARK: - search
-    func search(searchText: String,
-                completion: @escaping ([listDrugsModel]?) -> Void) {
-        var components = URLComponents(string: "http://shans.d2.i-partner.ru/api/ppp/index")
-//        components?.queryItems = [URLQueryItem(name: "",
-//                                               value: "")]
-        guard let url = components?.url else { return }
+    func search(completion: @escaping ([listDrugsModel]?) -> Void) {
+        let urlString = URL(string: "http://shans.d2.i-partner.ru/api/ppp/index")
+        guard let url = urlString else { return }
         request(urlString: url) { (result)  in
             switch result {
             case .success(let data):

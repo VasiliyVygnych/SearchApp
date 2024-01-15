@@ -19,7 +19,11 @@ class SearchPresenter: SearchPresenterProtocol {
     }
 //MARK: - getSearchText
     func getSearchText(text: String) {
-        interactor?.setSearchText(text: text)
+        print("text = \(text)")
+    }
+//MARK: - viewDidLoad
+    func viewDidLoad() {
+        interactor?.getData()
     }
 }
 extension SearchPresenter: SearchInteractorOutputProtocol {

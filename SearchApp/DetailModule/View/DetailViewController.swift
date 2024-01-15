@@ -219,10 +219,11 @@ class DetailViewController: UIViewController {
 //MARK: - extension DetailViewProtocol
 extension DetailViewController: DetailViewProtocol {
     func dataSet(model: listDrugsModel) {
-        let logoUrl = URL(string: "http://shans.d2.i-partner.ru\(model.categories.icon)")
-        imageLogo.sd_setImage(with: logoUrl,
+        let logo = URL(string: "http://shans.d2.i-partner.ru\(model.categories.icon)")
+        imageLogo.sd_setImage(with: logo,
                               placeholderImage: UIImage(systemName: "photo.circle"))
-        let previewUrl = URL(string: "http://shans.d2.i-partner.ru\(model.image)")
+        let preview = "http://shans.d2.i-partner.ru\(model.image)"
+        guard let previewUrl = URL(string: preview.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") else { return }
         previewImage.sd_setImage(with: previewUrl,
                                  placeholderImage: UIImage(named: "noFoto"))
         titleLabel.text = model.name

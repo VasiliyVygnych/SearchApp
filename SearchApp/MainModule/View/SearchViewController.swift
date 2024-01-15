@@ -18,6 +18,7 @@ class SearchViewController: UIViewController {
     var model: [listDrugsModel]? {
         didSet {
             collectionView.reloadData()
+            activityIndicator.stopAnimating()
         }
     }
 
@@ -56,6 +57,7 @@ class SearchViewController: UIViewController {
 //MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter?.viewDidLoad()
         view.backgroundColor = UIColor(named: "backgroundColor")
         navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
         navigationItem.leftBarButtonItem?.isHidden = true
@@ -144,7 +146,6 @@ extension SearchViewController: UISearchBarDelegate {
         }
     }
 }
-
 //MARK: - extension CollectionView
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 //MARK: - numberOfItemsInSection
@@ -159,7 +160,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                                                       for: indexPath) as? CollectionViewCell
         let model = model?[indexPath.item]
         cell?.configures(model: model)
-        activityIndicator.stopAnimating()
         return cell ?? UICollectionViewCell()
     }
 //MARK: - didSelectItemAt

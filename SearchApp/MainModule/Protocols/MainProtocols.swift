@@ -19,13 +19,14 @@ protocol SearchPresenterProtocol {
 
     func goDetailView(model: listDrugsModel)
     func getSearchText(text: String)
+    func viewDidLoad()
 }
 
 protocol SearchInteractorInputProtocol {
     var presenter: SearchInteractorOutputProtocol? { get set }
     var network: NetworkProtocol? { get set }
     
-    func setSearchText(text: String)
+    func getData()
 }
 
 protocol SearchInteractorOutputProtocol {

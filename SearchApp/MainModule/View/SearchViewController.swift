@@ -12,13 +12,11 @@ import SDWebImage
 class SearchViewController: UIViewController {
     
     var presenter: SearchPresenterProtocol?
-    private var activityIndicator = UIActivityIndicatorView()
     private let searchBar = UISearchBar()
     
     var model: [listDrugsModel]? {
         didSet {
             collectionView.reloadData()
-            activityIndicator.stopAnimating()
         }
     }
 
@@ -58,13 +56,12 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.viewDidLoad()
+        navigationItem.leftBarButtonItem?.isHidden = true
         view.backgroundColor = UIColor(named: "backgroundColor")
         navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
-        navigationItem.leftBarButtonItem?.isHidden = true
         navigationItem.titleView = navigationTitle
         setupeCollectionView()
         setupeSearchBar()
-        setupeIndicator()
         setupeConstraint()
         setupeButton()
     }
@@ -80,15 +77,6 @@ class SearchViewController: UIViewController {
     private func setupeSearchBar() {
         searchBar.searchTextField.backgroundColor = .white
         searchBar.delegate = self
-    }
-//MARK: - setupeIndicator
-    private func setupeIndicator() {
-        view.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
     }
 //MARK: - setupeButton
     private func setupeButton() {
@@ -131,27 +119,16 @@ extension SearchViewController: SearchViewProtocol {
         self.model = model
     }
 }
+//MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar,
-                   textDidChange textSearched: String) {
-        guard let textSearched = searchBar.text else { return }
-        activityIndicator.startAnimating() 
-        presenter?.getSearchText(text: textSearched)
-        navigationTitle.text = textSearched
+                   textDidChange searchText: String) {
+        presenter?.getSearchText(text: searchText)
+        navigationTitle.text = searchText
     }
 }
 //MARK: - extension CollectionView
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    
-    
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        model?.count ?? 0
-    }
-    
-    
-    
 //MARK: - numberOfItemsInSection
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {

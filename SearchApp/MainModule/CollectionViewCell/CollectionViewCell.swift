@@ -86,13 +86,14 @@ private extension CollectionViewCell {
             make.top.equalTo(imageView.snp.bottom).inset(-20)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().inset(12)
-            make.height.lessThanOrEqualTo(80)
+            make.height.lessThanOrEqualTo(60)
         }
         descriptionLabdel.snp.makeConstraints { make in
             make.top.equalTo(titleLabdel.snp.bottom).inset(-10)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().inset(12)
-            make.height.lessThanOrEqualTo(85)
+            make.height.lessThanOrEqualTo(130)
+            make.bottom.equalToSuperview().inset(10)
         }
     }
 }

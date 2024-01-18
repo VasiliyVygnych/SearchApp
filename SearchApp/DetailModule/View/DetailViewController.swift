@@ -192,7 +192,7 @@ class DetailViewController: UIViewController {
         descriptionLabdel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).inset(-10)
             make.width.equalTo(328)
-            make.height.equalTo(44)
+            make.height.lessThanOrEqualTo(100)
             make.left.equalTo(10)
         }
         infoButton.snp.makeConstraints { make in

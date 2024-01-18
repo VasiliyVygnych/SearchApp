@@ -17,10 +17,6 @@ class SearchPresenter: SearchPresenterProtocol {
     func goDetailView(model: listDrugsModel) {
         coordinator?.showDetailView(model: model)
     }
-//MARK: - getSearchText
-    func getSearchText(text: String) {
-        print("text = \(text)")
-    }
 //MARK: - viewDidLoad
     func viewDidLoad() {
         interactor?.getData()

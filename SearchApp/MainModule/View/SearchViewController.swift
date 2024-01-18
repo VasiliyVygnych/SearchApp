@@ -7,19 +7,24 @@
 
 import UIKit
 import SnapKit
-import SDWebImage
 
 class SearchViewController: UIViewController {
     
     var presenter: SearchPresenterProtocol?
-    private let searchBar = UISearchBar()
+    private let searchBar = UISearchBar(frame: .zero)
+    private var dataSource: UICollectionViewDiffableDataSource<Sections,
+                                                                listDrugsModel>?
     
-    var model: [listDrugsModel]? {
+    private var model: [listDrugsModel]? {
         didSet {
             collectionView.reloadData()
         }
     }
-
+    private var searchModel = [listDrugsModel]() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
 //MARK: - navigationTitle
     private var navigationTitle: UILabel = {
         let label = UILabel()
@@ -36,12 +41,14 @@ class SearchViewController: UIViewController {
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = .init(width: 195,
-                                height: 292)
-        layout.sectionInset = .init(top: 5,
-                                    left: 10,
-                                    bottom: 5,
-                                    right: 10)
+        layout.itemSize = .init(width: 164,
+                                height: 296)
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 5
+        layout.sectionInset = .init(top: 10,
+                                    left: 16,
+                                    bottom: 10,
+                                    right: 16)
         return layout
     }()
     lazy var collectionView: UICollectionView = {
@@ -64,11 +71,12 @@ class SearchViewController: UIViewController {
         setupeSearchBar()
         setupeConstraint()
         setupeButton()
+        configureDataSourse()
     }
 //MARK: - setupeCollectionView
     private func setupeCollectionView() {
         view.addSubview(collectionView)
-        collectionView.dataSource = self
+        collectionView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         collectionView.delegate = self
         collectionView.register(CollectionViewCell.self,
                                 forCellWithReuseIdentifier: "viewCell")
@@ -113,41 +121,69 @@ class SearchViewController: UIViewController {
         }
     }
 }
+//MARK: - DiffableDataSource
+extension SearchViewController {
+    func configureDataSourse() {
+        let cellRegistration = UICollectionView.CellRegistration
+        <CollectionViewCell,
+         listDrugsModel> { (cell, indexPath, model) in
+            cell.configures(model: model)
+        }
+        dataSource = UICollectionViewDiffableDataSource<Sections, listDrugsModel> (collectionView: collectionView) {
+            (collectionView: UICollectionView,
+             indexPath: IndexPath,
+             identifier: listDrugsModel) -> UICollectionViewCell? in
+            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
+                                                                    for: indexPath,
+                                                                    item: identifier)
+            return cell
+        }
+    }
+    func performSearch(searchText: String?) {
+        guard let model = model,
+        let text = searchText else { return }
+        searchModel = model.filter({ (models: listDrugsModel) -> Bool in
+            return models.name.lowercased().contains(text.lowercased())
+        })
+        var snapShot = NSDiffableDataSourceSnapshot<Sections,
+                                                    listDrugsModel>()
+            snapShot.appendSections([.search])
+        if searchText == "" {
+            snapShot.appendItems(model)
+        } else {
+            snapShot.appendItems(searchModel)
+        }
+        dataSource?.apply(snapShot,
+                         animatingDifferences: true)
+    }
+}
 //MARK: - extension SearchViewProtocol
 extension SearchViewController: SearchViewProtocol {
     func dataSet(model: [listDrugsModel]) {
         self.model = model
+        var snapShot = NSDiffableDataSourceSnapshot<Sections,
+                                                    listDrugsModel>()
+        snapShot.appendSections([.main])
+        snapShot.appendItems(model)
+        dataSource?.apply(snapShot,
+                          animatingDifferences: true)
     }
 }
 //MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
-        presenter?.getSearchText(text: searchText)
         navigationTitle.text = searchText
+        performSearch(searchText: searchText)
     }
 }
 //MARK: - extension CollectionView
-extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-//MARK: - numberOfItemsInSection
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        model?.count ?? 0
-    }
-//MARK: - cellForItemAt
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "viewCell",
-                                                      for: indexPath) as? CollectionViewCell
-        let model = model?[indexPath.item]
-        cell?.configures(model: model)
-        return cell ?? UICollectionViewCell()
-    }
+extension SearchViewController: UICollectionViewDelegate {
 //MARK: - didSelectItemAt
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        guard let collectionView = self.collectionView.cellForItem(at: indexPath) else { return  }
-        guard let model = model?[indexPath.item] else { return }
+        guard let collectionView = self.collectionView.cellForItem(at: indexPath),
+              let model = dataSource?.itemIdentifier(for: indexPath) else { return }
         UIView.animate(withDuration: 0.4,
                        delay: 0,
                        options: .curveEaseOut,

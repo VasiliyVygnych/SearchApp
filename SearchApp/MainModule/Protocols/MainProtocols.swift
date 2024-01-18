@@ -18,7 +18,6 @@ protocol SearchPresenterProtocol {
     var coordinator: AppCoordinatorProtocol? { get set }
 
     func goDetailView(model: listDrugsModel)
-    func getSearchText(text: String)
     func viewDidLoad()
 }
 

@@ -17,12 +17,13 @@ class SearchPresenter: SearchPresenterProtocol {
     func goDetailView(model: listDrugsModel) {
         coordinator?.showDetailView(model: model)
     }
-//MARK: - viewDidLoad
-    func viewDidLoad() {
-        interactor?.getData()
+//MARK: - getDataView
+    func getDataView(page: Int) {
+        interactor?.getData(page: page)
     }
 }
 extension SearchPresenter: SearchInteractorOutputProtocol {
+//MARK: - dataForTheView
     func dataForTheView(model: [listDrugsModel]) {
         view?.dataSet(model: model)
     }

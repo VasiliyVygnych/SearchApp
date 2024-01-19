@@ -12,14 +12,8 @@ enum Sections {
     case search
 }
 
-struct listDrugsModel: Codable, Hashable {
-    let id: Int
-    let image: String
-    let categories: Categories
-    let name, description: String
-    let documentation: String?
-    let fields: [Field]
-
+extension listDrugsModel: Hashable {
+    
     static func == (lhs: listDrugsModel,
                     rhs: listDrugsModel) -> Bool {
         return lhs.name == rhs.name
@@ -27,6 +21,15 @@ struct listDrugsModel: Codable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
+}
+// MARK: - listDrugsModel
+struct listDrugsModel: Codable {
+    let id: Int
+    let image: String
+    let categories: Categories
+    let name, description: String
+    let documentation: String?
+    let fields: [Field]
 }
 // MARK: - Categories
 struct Categories: Codable {
@@ -36,14 +39,21 @@ struct Categories: Codable {
 // MARK: - Field
 struct Field: Codable {
     let typesID: Int
+    let type: TypeEnum
     let name, value: String
+    let image: String?
     let flags: Flags
     let show, group: Int
 
     enum CodingKeys: String, CodingKey {
         case typesID = "types_id"
-        case name, value, flags, show, group
+        case type, name, value, image, flags, show, group
     }
+}
+enum TypeEnum: String, Codable {
+    case image = "image"
+    case list = "list"
+    case text = "text"
 }
 // MARK: - Flags
 struct Flags: Codable {

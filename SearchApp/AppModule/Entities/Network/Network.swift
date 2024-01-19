@@ -22,10 +22,13 @@ class Network: NetworkProtocol {
                 completion(.success(data))
         }.resume()
     }
-//MARK: - search
-    func search(completion: @escaping ([listDrugsModel]?) -> Void) {
-        let urlString = URL(string: "http://shans.d2.i-partner.ru/api/ppp/index")
-        guard let url = urlString else { return }
+//MARK: - fetchData
+    func fetchData(page: Int,
+                completion: @escaping ([listDrugsModel]?) -> Void) {
+        var components = URLComponents(string: "http://shans.d2.i-partner.ru/api/ppp/index")
+        components?.queryItems = [URLQueryItem(name: "limit",
+                                               value: String(page))]
+        guard let url = components?.url else { return }
         request(urlString: url) { (result)  in
             switch result {
             case .success(let data):
@@ -42,7 +45,7 @@ class Network: NetworkProtocol {
                 completion(nil)
             }
         }
-    }
+    }    
 //MARK: - getDrugCard
     func getDrugCard(id: Int,
                 completion: @escaping (listDrugsModel?) -> Void) {

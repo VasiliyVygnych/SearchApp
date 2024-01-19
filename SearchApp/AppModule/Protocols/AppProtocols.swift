@@ -20,7 +20,8 @@ protocol AppCoordinatorProtocol {
 }
 
 protocol NetworkProtocol {
-    func search(completion: @escaping ([listDrugsModel]?) -> Void)
     func getDrugCard(id: Int,
                 completion: @escaping (listDrugsModel?) -> Void)
+    func fetchData(page: Int,
+                   completion: @escaping ([listDrugsModel]?) -> Void)
 }

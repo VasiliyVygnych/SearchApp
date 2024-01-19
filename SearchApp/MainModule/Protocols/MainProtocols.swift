@@ -18,14 +18,14 @@ protocol SearchPresenterProtocol {
     var coordinator: AppCoordinatorProtocol? { get set }
 
     func goDetailView(model: listDrugsModel)
-    func viewDidLoad()
+    func getDataView(page: Int)
 }
 
 protocol SearchInteractorInputProtocol {
     var presenter: SearchInteractorOutputProtocol? { get set }
     var network: NetworkProtocol? { get set }
     
-    func getData()
+    func getData(page: Int)
 }
 
 protocol SearchInteractorOutputProtocol {

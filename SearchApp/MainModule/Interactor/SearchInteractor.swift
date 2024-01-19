@@ -11,9 +11,11 @@ class SearchInteractor: SearchInteractorInputProtocol {
     
     var presenter: SearchInteractorOutputProtocol?
     var network: NetworkProtocol?
-    
-    func getData() {
-        network?.search(completion: { [ weak self ] data in
+    var dataModel: listDrugsModel?
+//MARK: - getData
+    func getData(page: Int) {
+        network?.fetchData(page: page,
+                           completion: { [ weak self ] data in
             DispatchQueue.main.async {
                 guard let model = data else { return }
                 self?.presenter?.dataForTheView(model: model)

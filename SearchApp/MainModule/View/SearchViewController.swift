@@ -62,7 +62,8 @@ class SearchViewController: UIViewController {
 //MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.viewDidLoad()
+//        presenter?.viewDidLoad()
+        presenter?.getDataView(page: 10)
         navigationItem.leftBarButtonItem?.isHidden = true
         view.backgroundColor = UIColor(named: "backgroundColor")
         navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
@@ -139,6 +140,7 @@ extension SearchViewController {
             return cell
         }
     }
+//MARK: - performSearch
     func performSearch(searchText: String?) {
         guard let model = model,
         let text = searchText else { return }
@@ -202,5 +204,18 @@ extension SearchViewController: UICollectionViewDelegate {
                                                          y: 1)
             collectionView.backgroundColor = .white
         }, completion: nil)
+    }
+//MARK: - willDisplay
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        guard let model = self.model?[indexPath.item],
+              let test = dataSource?.indexPath(for: model),
+              var pageCount = self.model?.count else { return }
+        let total = 20
+        if test.last == (self.model?.count ?? 0) - 3 && self.model?.count ?? 0 < total {
+            pageCount += 5
+            presenter?.getDataView(page: pageCount)
+        }
     }
 }

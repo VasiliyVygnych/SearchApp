@@ -29,8 +29,6 @@ class SearchViewController: UIViewController {
     private var navigationTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 17,
-                                 weight: .bold)
         label.textAlignment = .center
         label.textColor = .white
         label.font = .sFProDisplay(ofSize: 17,
@@ -180,7 +178,6 @@ extension SearchViewController: UISearchBarDelegate {
 }
 //MARK: - extension CollectionView
 extension SearchViewController: UICollectionViewDelegate {
-//MARK: - didSelectItemAt
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
         guard let collectionView = self.collectionView.cellForItem(at: indexPath),

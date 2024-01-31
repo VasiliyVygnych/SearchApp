@@ -64,7 +64,6 @@ class DetailViewController: UIViewController {
     private var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .sFProDisplay(ofSize: 20,
                                    weight: .bold)
         label.numberOfLines = 0
